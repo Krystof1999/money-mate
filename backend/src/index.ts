@@ -19,8 +19,12 @@ app.use(
 
 app.use(express.json());
 
-app.get("/health", (_req: Request, res: Response) => {
-  res.json({ status: "ok" });
+app.get("/health", (_req, res) => {
+  res.json({
+    status: "status ok",
+    version: "1.0.4",
+    commit: process.env.RENDER_GIT_COMMIT ?? "local"
+  });
 });
 
 const PORT = process.env.PORT || 4000;
