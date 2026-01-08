@@ -4,8 +4,7 @@ function App() {
   const [health, setHealth] = useState<any>(null);
 
   useEffect(() => {
-    fetch("https://money-mate-0oqp.onrender.com/health")
-      // fetch("http://localhost:4000/health")
+    fetch(`${import.meta.env.VITE_API_URL}/health`)
       .then((res) => res.json())
       .then((data) => setHealth(data))
       .catch((err) => console.error(err));
