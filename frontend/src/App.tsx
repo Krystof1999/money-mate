@@ -1,23 +1,34 @@
 import { useEffect, useState } from "react";
+import { fetchTransactions } from "./api/transactions";
+import type { Transaction } from "./types/Transaction";
 
 function App() {
-  const [health, setHealth] = useState<any>(null);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/health`)
-      .then((res) => res.json())
-      .then((data) => setHealth(data))
-      .catch((err) => console.error(err));
+    fetchTransactions()
+      .then(setTransactions)
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, []);
 
   return (
     <div>
       <h1>Money Mate</h1>
+      {loading && <p>Loading transactions…</p>}
 
-      {health ? (
-        <pre>{JSON.stringify(health, null, 2)}</pre>
-      ) : (
-        <p>Loading backend status…</p>
+      {!loading && (
+        <ul>
+          {transactions.map((t) => (
+            <li key={t.id}>
+              <strong>{t.date}</strong> — {t.description} —{" "}
+              <strong>
+                {t.amount} {t.currency}
+              </strong>
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );

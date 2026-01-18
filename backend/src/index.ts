@@ -1,9 +1,8 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
+import transactionsRouter from "./routes/transactions";
 
-dotenv.config();
-
+const PORT = process.env.PORT || 4000;
 const app = express();
 
 app.use(
@@ -19,6 +18,7 @@ app.use(
 
 app.use(express.json());
 
+
 app.get("/health", (_req, res) => {
   res.json({
     status: "status ok",
@@ -27,7 +27,10 @@ app.get("/health", (_req, res) => {
   });
 });
 
-const PORT = process.env.PORT || 4000;
+app.use("/transactions", transactionsRouter);
+
+
+
 app.listen(PORT, () => {
   console.log(`Backend running on port ${PORT}`);
 });
